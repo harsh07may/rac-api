@@ -7,6 +7,31 @@ datasource db {
   provider = "postgresql"
 }
 
+enum VehicleStatus {
+  AVAILABLE
+  RENTED
+  MAINTENANCE
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  COMPLETED
+}
+
+enum TransactionType {
+  PAYMENT
+  REFUND
+  PAYOUT
+}
+
+enum TransactionStatus {
+  PENDING
+  SUCCESS
+  FAILED
+}
+
 // ============================================
 // IAM & Auth Domain
 // ============================================
@@ -113,8 +138,8 @@ model Vehicle {
   plateNumber String   @unique
   vin         String?  @unique
   color       String?
-  status      String   @default("AVAILABLE") // AVAILABLE, RENTED, MAINTENANCE
-  createdAt   DateTime @default(now())
+  status      VehicleStatus @default(AVAILABLE)
+  createdAt   DateTime      @default(now())
   updatedAt   DateTime @updatedAt
 
   agency   Agency          @relation(fields: [agencyId], references: [id])
@@ -190,10 +215,10 @@ model Booking {
   vehicleId  String
   pickupDate DateTime
   returnDate DateTime
-  basePrice  Decimal  @db.Decimal(10, 2)
-  totalPrice Decimal  @db.Decimal(10, 2)
-  status     String   @default("PENDING") // PENDING, CONFIRMED, CANCELLED, COMPLETED
-  createdAt  DateTime @default(now())
+  basePrice  Decimal       @db.Decimal(10, 2)
+  totalPrice Decimal       @db.Decimal(10, 2)
+  status     BookingStatus @default(PENDING)
+  createdAt  DateTime      @default(now())
   updatedAt  DateTime @updatedAt
 
   customer User    @relation(fields: [customerId], references: [id])
@@ -235,10 +260,10 @@ model BookingAddon {
 model Transaction {
   id          String   @id @default(uuid())
   bookingId   String?
-  amount      Decimal  @db.Decimal(10, 2)
-  type        String // PAYMENT, REFUND, PAYOUT
-  status      String // PENDING, SUCCESS, FAILED
-  providerRef String? // Stripe/PayPal transaction ID
+  amount      Decimal           @db.Decimal(10, 2)
+  type        TransactionType
+  status      TransactionStatus @default(PENDING)
+  providerRef String?           // Stripe/PayPal transaction ID
   createdAt   DateTime @default(now())
 
   booking Booking? @relation(fields: [bookingId], references: [id])
