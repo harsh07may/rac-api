@@ -1,0 +1,97 @@
+Nr,Table Name,Domain
+1,adv_company_advertisements,Advertising
+2,adv_coupons,Advertising
+3,adv_customercoupons,Advertising
+4,adv_subscription_payments,Finance
+5,advertisement_companyinformation,Advertising
+6,advertisement_paymentfrequency,Advertising
+7,advertisement_subscriptionplan,Subscriptions
+8,advertisementcoupons_linktbl,Advertising
+9,advertiser_subscriptions,Subscriptions
+10,audit_log,System
+11,authentication,IAM
+12,billing_information,Finance
+13,claimdocuments,Customer Success
+14,claims,Customer Success
+15,customerfeedback,Customer Success
+16,driver_availability,Drivers
+17,driver_rental_hours,Drivers
+18,drivers,IAM
+19,emp_agent_assignments_linkingtbl,Operations
+20,emp_agent_rental_tasks,Operations
+21,emp_cities,Geography
+22,emp_countries,Geography
+23,emp_departments,Operations
+24,emp_employees,IAM
+25,emp_permissions,IAM
+26,emp_regions,Geography
+27,emp_rental_agents,IAM
+28,emp_role_permissions_linkingtbl,IAM
+29,emp_roles,IAM
+30,emp_staff_jobpositions,IAM
+31,emp_user_roles_linkingtbl,IAM
+32,faqcategories,Customer Success
+33,faqs,Customer Success
+34,independent_driver_bookings,Rentals
+35,inspection_checklist_items,Maintenance
+36,inspection_checklist_results,Maintenance
+37,inspection_checklist_sections,Maintenance
+38,locations,Geography
+39,loyalty_user_memberships,Loyalty
+40,loyalty_user_rewards,Loyalty
+41,loyalty_user_transactions,Loyalty
+42,maintenance_events,Maintenance
+43,maintenance_items,Maintenance
+44,notification_queue,Customer Success
+45,pricing_rule_loyalty_levels_link,Rentals
+46,pricing_rules,Rentals
+47,rent_comp_promodiscount,Operations
+48,rent_comp_promotions_vehicles_linkingtbl,Marketing
+49,rental_add_on_compatibility,Rentals
+50,rental_add_ons,Rentals
+51,rental_agreement_add_ons,Rentals
+52,rental_agreement_extensions,Rentals
+53,rental_agreement_payments,Finance
+54,rental_agreement_payouts,Finance
+55,rental_agreement_pricing_rules_link,Rentals
+56,rental_agreement_transactions,Finance
+57,rental_agreements,Rentals
+58,rental_companies,Operations
+59,rental_company_subscription_payments,Finance
+60,rental_company_subscription_plans,Subscriptions
+61,rental_company_subscriptions,Subscriptions
+62,rental_insurance_coverages,Insurance
+63,rental_insurance_plan_coverages,Insurance
+64,rental_insurance_plans,Insurance
+65,rental_insurance_selections,Insurance
+66,rental_revenue_split,Finance
+67,roadside_assistance_plans,Assistance
+68,roadside_assistance_providers,Assistance
+69,roadside_assistance_request_events,Assistance
+70,roadside_assistance_requests,Assistance
+71,saved_vehicles,Customer Success
+72,support_tickets,Customer Success
+73,tax_rates,Finance
+74,telematics,Drivers
+75,telematics_data_points,Drivers
+76,user_link_tbl,IAM
+77,users,IAM
+78,vehicle_annual_insurance_policies,Catalog
+79,vehicle_category_commissions,Catalog
+80,vehicle_daily_rates,Rentals
+81,vehicle_damage_reports,Maintenance
+82,vehicle_features,Catalog
+83,vehicle_features_link,Catalog
+84,vehicle_inspections,Maintenance
+85,vehicle_makes,Catalog
+86,vehicle_models,Catalog
+87,vehicle_parking,Geography
+88,vehicle_parking_lots,Geography
+89,vehicle_registrations,Catalog
+90,vehicle_roadside_providers_linktbl,Assistance
+91,vehicle_types,Catalog
+92,vehicles,Catalog
+93,waitlist,Operations
+94,website_bank_accounts,Finance
+95,website_companies,System
+96,website_settings,System

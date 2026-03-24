@@ -1,0 +1,65 @@
+Domain,Table Name,Original Mapping (tables.csv),Description
+IAM,Users,users; emp_employees; emp_rental_agents; drivers,Platform users including customers, employees, and drivers
+IAM,Roles,emp_roles; emp_staff_jobpositions,User roles for RBAC
+IAM,Permissions,emp_permissions,Permissions for roles
+IAM,Sessions,authentication,User sessions and auth credentials
+IAM,UserLinks,user_link_tbl,Social logins or third party auth links
+Geography,Countries,emp_countries,Lookup table for countries
+Geography,Regions,emp_regions,Lookup table for regions
+Geography,Cities,emp_cities,Lookup table for cities
+Geography,Locations,locations,Physical addresses for branches or offices
+Geography,ParkingLots,vehicle_parking_lots,Parking lot locations for vehicles
+Catalog,Vehicles,vehicles,Core vehicle catalog
+Catalog,VehicleMakes,vehicle_makes,Vehicle manufacturers
+Catalog,VehicleModels,vehicle_models,Vehicle models
+Catalog,VehicleTypes,vehicle_types; vehicle_category_commissions,Vehicle categories 
+Catalog,Features,vehicle_features,Vehicle features and specs
+Catalog,VehicleRegistrations,vehicle_registrations,Registration tracking
+Catalog,VehicleInsurances,vehicle_annual_insurance_policies,Corporate annual insurance tracking
+Operations,Agencies,rental_companies,Rental companies (B2B SaaS tenants)
+Operations,AgencySettings,rent_comp_promodiscount,Agency specific operational settings
+Operations,Waitlists,waitlist,Customer waitlist for vehicles
+Rentals,Bookings,rental_agreements; independent_driver_bookings,Core rental agreement/booking
+Rentals,BookingAddons,rental_agreement_add_ons,Addons selected for a booking
+Rentals,BookingExtensions,rental_agreement_extensions,Extensions to original booking
+Rentals,Addons,rental_add_ons; rental_add_on_compatibility,Available addons library
+Rentals,PricingRules,pricing_rules; rental_agreement_pricing_rules_link,Dynamic pricing rules
+Rentals,DailyRates,vehicle_daily_rates,Base daily rates
+Insurance,InsurancePlans,rental_insurance_plans,Customer rental protection plans
+Insurance,InsuranceCoverages,rental_insurance_coverages; rental_insurance_plan_coverages,Coverage definitions
+Insurance,InsuranceSelections,rental_insurance_selections,Customer plan selections
+Maintenance,MaintenanceLogs,maintenance_events,Maintenance and service events
+Maintenance,MaintenanceItems,maintenance_items,Line items for maintenance events
+Maintenance,DamageReports,vehicle_damage_reports,Reported vehicle damages
+Maintenance,Inspections,vehicle_inspections,Pre and post rental inspections
+Maintenance,InspectionChecklists,inspection_checklist_sections; inspection_checklist_items,Checklist templates
+Maintenance,InspectionResults,inspection_checklist_results,Results for specific inspections
+Customer Success,SupportTickets,support_tickets,Customer service tickets
+Customer Success,Feedback,customerfeedback,Customer reviews and ratings
+Customer Success,Claims,claims,Damage or insurance claims
+Customer Success,ClaimDocuments,claimdocuments,Documents attached to claims
+Customer Success,FAQs,faqs; faqcategories,Frequently asked questions
+Customer Success,SavedVehicles,saved_vehicles,User favorited vehicles
+Customer Success,Notifications,notification_queue,System notifications queue
+Loyalty,LoyaltyMemberships,loyalty_user_memberships,Loyalty program tiers
+Loyalty,LoyaltyTransactions,loyalty_user_transactions,Points earned and spent
+Loyalty,LoyaltyRewards,loyalty_user_rewards; pricing_rule_loyalty_levels_link,Available loyalty rewards
+Advertising,Advertisers,advertisement_companyinformation,Third party advertising partners
+Advertising,Campaigns,adv_company_advertisements,Advertising campaigns
+Advertising,Coupons,adv_coupons; adv_customercoupons; advertisementcoupons_linktbl,Discount coupons created by advertisers
+Subscriptions,Subscriptions,rental_company_subscriptions; advertiser_subscriptions,Active subscription plans
+Subscriptions,SubscriptionPlans,rental_company_subscription_plans; advertisement_subscriptionplan,SaaS pricing tiers
+Finance,Transactions,rental_agreement_payments; adv_subscription_payments; rental_company_subscription_payments; rental_agreement_transactions,Unified payments and refunds
+Finance,Payouts,rental_agreement_payouts,Payouts to rental companies
+Finance,Invoices,billing_information,Customer billing information
+Finance,Taxes,tax_rates,Global and regional tax rates
+Finance,BankAccounts,website_bank_accounts,Bank accounts for payouts
+Finance,RevenueSplits,rental_revenue_split,Revenue splitting rules
+Drivers,DriverSchedules,driver_availability; driver_rental_hours,Chauffeur availability calendar
+Drivers,TelematicsDevices,telematics,Hardware telematics definitions
+Drivers,TelematicsData,telematics_data_points,Realtime telematics data log
+Assistance,AssistanceProviders,roadside_assistance_providers; vehicle_roadside_providers_linktbl,Roadside service partners
+Assistance,AssistancePlans,roadside_assistance_plans,Roadside service packages
+Assistance,AssistanceRequests,roadside_assistance_requests; roadside_assistance_request_events,Active roadside calls
+System,AuditLogs,audit_log,System audit trails
+System,SystemSettings,website_settings; website_companies,Global platform configuration

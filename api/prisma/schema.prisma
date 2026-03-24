@@ -27,8 +27,9 @@ model User {
   agencyId String? // For B2B agency users
   agency   Agency? @relation(fields: [agencyId], references: [id])
 
-  sessions Session[]
-  bookings Booking[] // As a customer
+  sessions  Session[]
+  bookings  Booking[] // As a customer
+  waitlists Waitlist[]
 
   @@map("users")
 }
@@ -75,9 +76,11 @@ model Agency {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  users    User[] // Agency employees
-  branches Branch[] // Physical locations
-  vehicles Vehicle[] // Fleet owned by agency
+  users         User[] // Agency employees
+  branches      Branch[] // Physical locations
+  vehicles      Vehicle[] // Fleet owned by agency
+  parkingLots   ParkingLot[]
+  agencySetting AgencySetting?
 
   @@map("agencies")
 }
@@ -120,9 +123,12 @@ model Vehicle {
   model    VehicleModel    @relation(fields: [modelId], references: [id])
   category VehicleCategory @relation(fields: [categoryId], references: [id])
 
-  features Feature[] // M-to-M features (GPS, AC)
-  rates    DailyRate[]
-  bookings Booking[]
+  features            Feature[] // M-to-M features (GPS, AC)
+  rates               DailyRate[]
+  bookings            Booking[]
+  vehicleRegistration VehicleRegistration?
+  vehicleInsurance    VehicleInsurance?
+  waitlists           Waitlist[]
 
   @@map("vehicles")
 }
@@ -244,20 +250,95 @@ model Transaction {
 // Geography Domain
 // ============================================
 model Country {
-  id     String @id @default(uuid())
-  name   String @unique
-  code   String @unique @db.Char(2)
-  cities City[]
+  id      String   @id @default(uuid())
+  name    String   @unique
+  code    String   @unique @db.Char(2)
+  cities  City[]
+  regions Region[]
 
   @@map("countries")
 }
 
 model City {
-  id        String   @id @default(uuid())
+  id        String     @id @default(uuid())
   name      String
   countryId String
-  country   Country  @relation(fields: [countryId], references: [id])
+  country   Country    @relation(fields: [countryId], references: [id])
   branches  Branch[]
+  locations Location[]
 
   @@map("cities")
+}
+
+model Region {
+  id        String  @id @default(uuid())
+  name      String
+  countryId String
+  country   Country @relation(fields: [countryId], references: [id])
+
+  @@map("regions")
+}
+
+model Location {
+  id        String @id @default(uuid())
+  name      String
+  address   String
+  latitude  Float?
+  longitude Float?
+  cityId    String
+  city      City   @relation(fields: [cityId], references: [id])
+
+  @@map("locations")
+}
+
+model ParkingLot {
+  id       String @id @default(uuid())
+  name     String
+  agencyId String
+  agency   Agency @relation(fields: [agencyId], references: [id])
+  capacity Int
+
+  @@map("parking_lots")
+}
+
+model VehicleRegistration {
+  id              String   @id @default(uuid())
+  vehicleId       String   @unique
+  vehicle         Vehicle  @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+  registrationNum String   @unique
+  expiryDate      DateTime
+
+  @@map("vehicle_registrations")
+}
+
+model VehicleInsurance {
+  id         String   @id @default(uuid())
+  vehicleId  String   @unique
+  vehicle    Vehicle  @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+  policyNum  String   @unique
+  provider   String
+  expiryDate DateTime
+
+  @@map("vehicle_insurances")
+}
+
+model AgencySetting {
+  id       String @id @default(uuid())
+  agencyId String @unique
+  agency   Agency @relation(fields: [agencyId], references: [id], onDelete: Cascade)
+  key      String
+  value    String
+
+  @@map("agency_settings")
+}
+
+model Waitlist {
+  id         String   @id @default(uuid())
+  customerId String
+  customer   User     @relation(fields: [customerId], references: [id])
+  vehicleId  String
+  vehicle    Vehicle  @relation(fields: [vehicleId], references: [id])
+  dateAdded  DateTime @default(now())
+
+  @@map("waitlists")
 }

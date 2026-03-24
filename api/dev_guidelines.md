@@ -17,7 +17,7 @@ These must be in place **before any feature module is built**.
 | Standard Response Shape   | [sendSuccess](file:///d:/My%20Coding/backend/druxcars/api/src/lib/response.ts#3-10) / [sendError](file:///d:/My%20Coding/backend/druxcars/api/src/lib/response.ts#14-21) | [src/lib/response.ts](file:///d:/My%20Coding/backend/druxcars/api/src/lib/response.ts)                                     | ✅ Done    |
 | Centralized Error Handler | Express error middleware                                                                                                                                           | [src/middleware/error.middleware.ts](file:///d:/My%20Coding/backend/druxcars/api/src/middleware/error.middleware.ts)       | ✅ Done    |
 | Request Validation        | `zod` + middleware                                                                                                                                               | [src/middleware/validate.middleware.ts](file:///d:/My%20Coding/backend/druxcars/api/src/middleware/validate.middleware.ts) | ✅ Done    |
-| Auth Middleware           | JWT verify                                                                                                                                                         | `src/middleware/auth.middleware.ts`                                                                                   | ⬜ Pending |
+| Auth Middleware           | JWT verify                                                                                                                                                         | `src/middleware/auth.middleware.ts`                                                                                   | ✅ Done    |
 
 ---
 

@@ -1,0 +1,29 @@
+# npm
+node_modules
+package-lock.json
+npm-shrinkwrap.json
+*.log
+*.gz
+
+# Yarn
+yarn-error.log
+yarn.lock
+
+# Coveralls
+.nyc_output
+coverage
+
+# Benchmarking
+benchmarks/graphs
+
+# Keep environment variables out of version control
+.env
+
+# Prisma generated files
+/prisma/generated
+
+# ignore additional files using core.excludesFile
+# https://git-scm.com/docs/gitignore
+
+
+
