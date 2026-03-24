@@ -5,7 +5,7 @@ import prisma  from '../../config/db.js';
 import { envConfig } from '../../config/envConfig.js';
 import { logger } from '../../config/logger.js';
 import { AppError, Conflict, Unauthorized, NotFound } from '../../lib/AppError.js';
-import type { RegisterInput, LoginInput, RefreshInput } from './iam.schema.js';
+import type { RegisterInput, LoginInput } from './iam.schema.js';
 import { SALT_ROUNDS, ACCESS_TOKEN_TTL, REFRESH_TOKEN_TTL_MS } from '../../CONSTANTS.js';
 
 // Helpers
@@ -75,9 +75,9 @@ export async function login(input: LoginInput) {
 }
 
 /** Issues a new access token using a valid (unexpired) refresh token. */
-export async function refresh(input: RefreshInput) {
+export async function refresh(token: string) {
   const session = await prisma.session.findUnique({
-    where: { refreshToken: input.refreshToken },
+    where: { refreshToken: token },
     include: { user: true },
   });
 

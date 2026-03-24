@@ -21,9 +21,7 @@ benchmarks/graphs
 
 # Prisma generated files
 /prisma/generated
+/prisma/data
 
 # ignore additional files using core.excludesFile
 # https://git-scm.com/docs/gitignore
-
-
-

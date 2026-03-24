@@ -1,34 +1,46 @@
-import "./config/envConfig.js"; // Must be first — validates env vars on startup
-import express, { type Express, type Request, type Response } from "express";
-import expressOasGenerator from "express-oas-generator";
 import cors from "cors";
-import helmet from "helmet";
-import { pinoHttp } from "pino-http";
+import express, { type Express, type Request, type Response } from "express";
 import rateLimit from "express-rate-limit";
+import helmet from "helmet";
+import cookieParser from "cookie-parser";
+import { pinoHttp } from "pino-http";
+import "./config/envConfig.js"; // Must be first — validates env vars on startup
 
 import { envConfig } from "./config/envConfig.js";
 import { logger } from "./config/logger.js";
-import { errorMiddleware } from "./middleware/error.middleware.js";
 import { sendSuccess } from "./lib/response.js";
+import { errorMiddleware } from "./middleware/error.middleware.js";
 
-import iamRoutes from "./modules/iam/iam.routes.js";
-import fleetRoutes from "./modules/fleet/fleet.routes.js";
-import rentalsRoutes from "./modules/rentals/rentals.routes.js";
 import { RATE_LIMIT_CONSTANTS } from "./CONSTANTS.js";
 import STATUS_CODE from "./lib/HttpStatusCodes.js";
+import fleetRoutes from "./modules/fleet/fleet.routes.js";
+import iamRoutes from "./modules/iam/iam.routes.js";
+import rentalsRoutes from "./modules/rentals/rentals.routes.js";
 
 const app: Express = express();
 
-// oas-generator is runtime; TS is not so ig its okay lol
-expressOasGenerator.handleResponses(app as any, {} as any);
 
 // Security & Core Middleware
 app.use(helmet());
 app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
 
 // Request Logging
-app.use(pinoHttp({ logger }));
+app.use(
+  pinoHttp({
+    logger,
+    serializers: {
+      req: (req) => ({
+        method: req.method,
+        url: req.url,
+      }),
+      res: (res) => ({
+        statusCode: res.statusCode,
+      }),
+    },
+  }),
+);
 
 //  Rate Limiting
 app.use(
@@ -57,7 +69,6 @@ app.use("/api/v1/rentals", rentalsRoutes);
 
 //  Global Error Handler (must be last)
 app.use(errorMiddleware);
-expressOasGenerator.handleRequests();
 
 //  Start
 app.listen(envConfig.PORT, () => {
