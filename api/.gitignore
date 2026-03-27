@@ -1,3 +1,5 @@
+# https://git-scm.com/docs/gitignore
+
 # npm
 node_modules
 package-lock.json
@@ -23,6 +25,9 @@ benchmarks/graphs
 /prisma/generated
 /prisma/data
 
+# Build
 dist 
-# ignore additional files using core.excludesFile
-# https://git-scm.com/docs/gitignore
+
+# Docs - Bruno Collection
+docs/rac-api
+

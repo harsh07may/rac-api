@@ -1,16 +1,19 @@
-import "./config/envConfig.js"; // Must be first — validates env vars on startup
+// Must be first — validates env vars on startup
+import "./config/envConfig.js";
 
-import cors from "cors";
+// External imports
 import express, { type Express, type Request, type Response } from "express";
-import rateLimit from "express-rate-limit";
+import cors from "cors";
 import helmet from "helmet";
 import cookieParser from "cookie-parser";
+import rateLimit from "express-rate-limit";
 import { pinoHttp } from "pino-http";
 import swaggerUi from "swagger-ui-express";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 
+// Internal imports
 import { envConfig } from "./config/envConfig.js";
 import { logger } from "./config/logger.js";
 import { sendSuccess } from "./lib/response.js";
@@ -18,77 +21,109 @@ import { errorMiddleware } from "./middleware/error.middleware.js";
 
 import { RATE_LIMIT_CONSTANTS } from "./CONSTANTS.js";
 import STATUS_CODE from "./lib/HttpStatusCodes.js";
+
 import fleetRoutes from "./modules/fleet/fleet.routes.js";
 import iamRoutes from "./modules/iam/iam.routes.js";
 import rentalsRoutes from "./modules/rentals/rentals.routes.js";
 
 const app: Express = express();
 
-// Security & Core Middleware
-app.use(helmet());
-app.use(cors());
-app.use(express.json());
-app.use(cookieParser());
+/* -------------------------------------------------------------------------- */
+/*                               MIDDLEWARE                                   */
+/* -------------------------------------------------------------------------- */
 
-// Request Logging
-app.use(
-  pinoHttp({
-    logger,
-    serializers: {
-      req: (req) => ({
-        method: req.method,
-        url: req.url,
-      }),
-      res: (res) => ({
-        statusCode: res.statusCode,
-      }),
-    },
-  }),
-);
+const setupCoreMiddleware = (app: Express) => {
+  app.use(helmet());
+  app.use(cors());
+  app.use(express.json());
+  app.use(cookieParser());
+};
 
-//  Rate Limiting
-app.use(
-  rateLimit({
-    windowMs: RATE_LIMIT_CONSTANTS.WINDOW_MS,
-    max: RATE_LIMIT_CONSTANTS.MAX,
-    standardHeaders: true,
-    legacyHeaders: false,
-    message: {
-      success: false,
-      error: "Too many requests, please try again later.",
-      code: STATUS_CODE.TOO_MANY_REQUESTS,
-    },
-  }),
-);
+const setupLogging = (app: Express) => {
+  app.use(
+    pinoHttp({
+      logger,
+      serializers: {
+        req: (req) => ({ method: req.method, url: req.url }),
+        res: (res) => ({ statusCode: res.statusCode }),
+      },
+    }),
+  );
+};
 
-//  Health Check
-app.get("/api/v1/health", (_req: Request, res: Response) => {
-  sendSuccess(res, { status: "ok", timestamp: new Date().toISOString() });
-});
+const setupRateLimiter = (app: Express) => {
+  app.use(
+    rateLimit({
+      windowMs: RATE_LIMIT_CONSTANTS.WINDOW_MS,
+      max: RATE_LIMIT_CONSTANTS.MAX,
+      standardHeaders: true,
+      legacyHeaders: false,
+      message: {
+        success: false,
+        error: "Too many requests, please try again later.",
+        code: STATUS_CODE.TOO_MANY_REQUESTS,
+      },
+    }),
+  );
+};
 
-//  API Routes
-app.use("/api/v1/iam", iamRoutes);
-app.use("/api/v1/fleet", fleetRoutes);
-app.use("/api/v1/rentals", rentalsRoutes);
+/* -------------------------------------------------------------------------- */
+/*                                 ROUTES                                     */
+/* -------------------------------------------------------------------------- */
 
-// Swagger API Documentation
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const swaggerPath = path.resolve(__dirname, "./swagger.json");
-
-if (envConfig.NODE_ENV === "development" && fs.existsSync(swaggerPath)) {
-  const swaggerDocument = JSON.parse(fs.readFileSync(swaggerPath, "utf8"));
-  app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-} else {
-  app.use("/api-docs", (req, res) => {
-    res.send("Swagger file not found. Run 'npm run docs:generate' first.");
+const setupRoutes = (app: Express) => {
+  // Health Check
+  app.get("/api/v1/health", (_req: Request, res: Response) => {
+    sendSuccess(res, {
+      status: "ok",
+      timestamp: new Date().toISOString(),
+    });
   });
-}
 
-//  Global Error Handler (must be last)
+  // API routes
+  app.use("/api/v1/iam", iamRoutes);
+  app.use("/api/v1/fleet", fleetRoutes);
+  app.use("/api/v1/rentals", rentalsRoutes);
+};
+
+/* -------------------------------------------------------------------------- */
+/*                             SWAGGER SETUP                                  */
+/* -------------------------------------------------------------------------- */
+
+const setupSwagger = (app: Express) => {
+  const __filename = fileURLToPath(import.meta.url);
+  const __dirname = path.dirname(__filename);
+  const swaggerPath = path.resolve(__dirname, "../docs/api-spec.json");
+
+  if (envConfig.NODE_ENV === "development" && fs.existsSync(swaggerPath)) {
+    const swaggerDocument = JSON.parse(fs.readFileSync(swaggerPath, "utf8"));
+
+    logger.info(`Swagger docs at http://localhost:${envConfig.PORT}/api-docs`);
+    app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+  } else {
+    app.use("/api-docs", (_req, res) => {
+      res.send("Swagger file not found. Run 'npm run docs:generate' first.");
+    });
+  }
+};
+
+/* -------------------------------------------------------------------------- */
+/*                               INITIALIZE                                   */
+/* -------------------------------------------------------------------------- */
+
+setupCoreMiddleware(app);
+setupLogging(app);
+setupRateLimiter(app);
+setupRoutes(app);
+setupSwagger(app);
+
+// Global Error Handler (must be last)
 app.use(errorMiddleware);
 
-//  Start
+/* -------------------------------------------------------------------------- */
+/*                                 SERVER                                     */
+/* -------------------------------------------------------------------------- */
+
 app.listen(envConfig.PORT, () => {
   logger.info(
     `Server running at http://localhost:${envConfig.PORT} [${envConfig.NODE_ENV}]`,
